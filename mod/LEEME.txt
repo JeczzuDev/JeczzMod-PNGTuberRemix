@@ -1,0 +1,59 @@
+JeczzMod - Mouse X / Mouse Y para Follow Movement
+Version del mod: 1.0.0
+Para: PNGTube Remix 1.4.5 (Windows)
+==================================================
+
+QUE HACE
+--------
+Agrega dos opciones a los selectores "Follow Option" de la seccion
+Follow Movement (Position, Rotation y Scale):
+
+  - Mouse X: solo el movimiento horizontal del mouse mueve el sprite.
+  - Mouse Y: solo el movimiento vertical del mouse mueve el sprite.
+
+  Position  Mouse X -> el sprite se mueve solo en X.  Mouse Y -> solo en Y.
+  Rotation  Mouse X -> igual que "Mouse".  Mouse Y -> gira segun la altura del mouse.
+  Scale     Mouse X -> escala solo en horizontal.  Mouse Y -> solo en vertical.
+
+Swap X / Swap Y e Invert siguen funcionando, asi que puedes cruzar ejes
+(por ejemplo, que el mouse horizontal mueva el sprite en vertical).
+
+Con "Follow mouse velocity" activado, el sprite reacciona a la rapidez del
+mouse solo en el eje elegido. En Rotation y Scale esto si funciona con
+Mouse X / Mouse Y (en la 1.4.5 original, "Mouse" con velocidad no hace nada
+en rotacion ni escala).
+
+El mod no modifica ningun archivo de la app: solo agrega archivos al lado
+del ejecutable.
+
+
+INSTALAR
+--------
+1. Cierra PNGTube Remix.
+2. Copia "override.cfg" y la carpeta "mods" dentro de la carpeta donde esta
+   "PNGTube Remix.exe".
+   - Si ya existia un "override.cfg", no lo reemplaces: agrega esta linea
+     debajo de [autoload] (crea la seccion si no existe):
+       JeczzModLoader="*res://mods/jeczz_mod_loader.gd"
+3. Abre la app. Las opciones "Mouse X" y "Mouse Y" aparecen al final de
+   cada selector Follow Option.
+
+Para comprobar que cargo, abre "PNGTube Remix.console.exe": en la consola
+debe aparecer  [JeczzMod] v1.0.0 loaded 3/3 script swaps
+
+
+DESINSTALAR
+-----------
+Copia "Desinstalar JeczzMod.bat" a la carpeta de la app y ejecutalo, o
+borra a mano "override.cfg" (si solo tiene la linea del mod),
+"mods\jeczz_mod_loader.gd" y "mods\follow_mouse_axis".
+
+
+IMPORTANTE
+----------
+- Modelos guardados con Mouse X / Mouse Y y abiertos en la app SIN el mod:
+  esos sprites no seguiran al mouse en ese selector y el selector se vera
+  vacio. Vuelve a elegir una opcion o reinstala el mod.
+- Si actualizas PNGTube Remix a otra version, el mod se desactiva solo
+  (la app funciona normal) hasta que haya una version del mod para ella.
+  En la consola veras: "mod disabled".
