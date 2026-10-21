@@ -1,11 +1,11 @@
 JeczzMod - Extensiones para Follow Movement
-Version del mod: 1.1.0
+Version del mod: 1.2.0
 Para: PNGTube Remix 1.4.5 (Windows)
 ==================================================
 
 QUE HACE
 --------
-1) Mouse X / Mouse Y
+1) Opciones por eje: Mouse X / Mouse Y y ejes de los sticks
 Agrega dos opciones a los selectores "Follow Option" de la seccion
 Follow Movement (Position, Rotation y Scale):
 
@@ -15,6 +15,16 @@ Follow Movement (Position, Rotation y Scale):
   Position  Mouse X -> el sprite se mueve solo en X.  Mouse Y -> solo en Y.
   Rotation  Mouse X -> igual que "Mouse".  Mouse Y -> gira segun la altura del mouse.
   Scale     Mouse X -> escala solo en horizontal.  Mouse Y -> solo en vertical.
+
+Desde 1.2.0, lo mismo para cada eje de los sticks: "Controller (Left) X",
+"Controller (Left) Y", "Controller (Right) X" y "Controller (Right) Y".
+  Position  X -> solo la inclinacion horizontal mueve el sprite en X; Y -> solo
+            la vertical, en Y.
+  Rotation  X -> igual que "Controller".  Y -> gira con la inclinacion
+            vertical (arriba = rot min, abajo = rot max).
+  Scale     X -> solo escala en horizontal; Y -> solo en vertical (el otro eje
+            queda en 1). El eje elegido se comporta como "Controller": stick
+            al centro = max, inclinado a fondo = min.
 
 Swap X / Swap Y e Invert siguen funcionando, asi que puedes cruzar ejes
 (por ejemplo, que el mouse horizontal mueva el sprite en vertical).
@@ -27,8 +37,8 @@ en rotacion ni escala).
 2) Fuente secundaria (desde 1.1.0)
 Debajo de cada selector aparece "+ Secondary": una segunda fuente que se
 combina con la principal (por ejemplo, mouse + control). Opciones: Mouse,
-Mouse X, Mouse Y, Control izquierdo/derecho, R1+L1, R2+L2, R3+L3, WASD y
-Flechas. Debajo de Scale, "Combine" elige como se combinan (por sprite):
+Mouse X, Mouse Y, Control izquierdo/derecho (completo o un solo eje), R1+L1,
+R2+L2, R3+L3, WASD y Flechas. Debajo de Scale, "Combine" elige como se combinan (por sprite):
 
   Last active         (por defecto) Solo manda la ultima fuente que se uso
                       (stick fuera del centro, tecla presionada o mouse en
@@ -69,7 +79,7 @@ INSTALAR
    cada selector Follow Option, y debajo de cada uno la fila "+ Secondary".
 
 Para comprobar que cargo, abre "PNGTube Remix.console.exe": en la consola
-debe aparecer  [JeczzMod] v1.1.0 loaded 3/3 script swaps
+debe aparecer  [JeczzMod] v1.2.0 loaded 3/3 script swaps
 
 
 DESINSTALAR
@@ -81,7 +91,8 @@ borra a mano "override.cfg" (si solo tiene la linea del mod),
 
 IMPORTANTE
 ----------
-- Modelos guardados con Mouse X / Mouse Y y abiertos en la app SIN el mod:
+- Modelos guardados con Mouse X / Mouse Y o un eje de stick (Controller
+  ... X / Y) y abiertos en la app SIN el mod:
   esos sprites no seguiran al mouse en ese selector y el selector se vera
   vacio. Vuelve a elegir una opcion o reinstala el mod.
 - La fuente secundaria se guarda en el modelo; la app sin el mod la ignora

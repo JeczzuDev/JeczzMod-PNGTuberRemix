@@ -8,7 +8,7 @@ extends Node
 ## tree with one of the original scripts gets its script swapped for a mod
 ## subclass before its _ready, keeping all script variable values.
 
-const MOD_VERSION := "1.1.0"
+const MOD_VERSION := "1.2.0"
 const MOD_DIR := "res://mods"
 const LOG_PREFIX := "[JeczzMod] "
 ## The subclasses copy parts of these exact game scripts; on any other game
@@ -22,13 +22,12 @@ const SCRIPT_SWAPS := {
 	"res://Scripts/Objects/ObjectComponents/follow_scale.gd": "res://mods/follow_ext/follow_scale_ext.gd",
 }
 const SECONDARY_UI := "res://mods/follow_ext/secondary_ui.gd"
+const FOLLOW_SHARED := "res://mods/follow_ext/follow_shared.gd"
 
 ## Follow selectors (unique names in movement.tscn). The game stores the selected
 ## item INDEX, so new options must be appended after the 18 built-in items.
 const FOLLOW_SELECTORS := ["FollowOption", "FollowOption2", "FollowOption3"]
 const VANILLA_ITEM_COUNT := 18
-const MOUSE_X := 18
-const MOUSE_Y := 19
 
 var _swaps := {}
 var _enabled := false
@@ -68,7 +67,7 @@ func _on_node_added(n: Node) -> void:
 	if s != null and _swaps.has(s.resource_path):
 		_swap_script(n, _swaps[s.resource_path])
 	elif n is OptionButton and String(n.name) in FOLLOW_SELECTORS:
-		_add_mouse_axis_items(n)
+		_add_extra_items(n)
 		if n.name == FOLLOW_SELECTORS[-1]:
 			# The panel is still adding children; build once it's done.
 			_attach_secondary_ui.call_deferred(n)
@@ -82,12 +81,16 @@ func _swap_script(n: Node, sub: Script) -> void:
 	for k in values:
 		n.set(k, values[k])
 
-func _add_mouse_axis_items(ob: OptionButton) -> void:
+## Appends Mouse X/Y and the single-axis stick options; each one's index in the
+## selector is its follow type.
+func _add_extra_items(ob: OptionButton) -> void:
 	if ob.item_count != VANILLA_ITEM_COUNT:
 		return
-	var mouse := tr("TR_MOUSE")
-	ob.add_item(mouse + " X", MOUSE_X)
-	ob.add_item(mouse + " Y", MOUSE_Y)
+	for item in load(FOLLOW_SHARED).EXTRA_PRIMARY_ITEMS:
+		if ob.item_count != item[0]:
+			push_error(LOG_PREFIX + "unexpected item index for follow type %d" % item[0])
+			return
+		ob.add_item(tr(item[1]) + item[2], item[0])
 
 func _attach_secondary_ui(last_selector: OptionButton) -> void:
 	if not is_instance_valid(last_selector) or not last_selector.is_inside_tree():

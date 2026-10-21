@@ -14,6 +14,7 @@ var secondary_mouse := Shared.MouseActivity.new()
 var use_secondary : bool = false
 var _was_p : bool = false
 var _was_s : bool = false
+var _sources := Vector2i(-1, -1)
 
 func reset() -> void:
 	use_secondary = false
@@ -23,6 +24,10 @@ func reset() -> void:
 ## Call every frame while a secondary is set (keeps the mouse trackers current).
 ## `pkey`/`skey` are the sprite_data keys holding `ptype`/`sec`.
 func update(comp, ptype: int, pkey: String, sec: int, skey: String, delta: float) -> bool:
+	# A different source pair starts over from the primary.
+	if Vector2i(ptype, sec) != _sources:
+		reset()
+		_sources = Vector2i(ptype, sec)
 	primary_mouse.update(Shared.axis_mask(ptype), delta)
 	secondary_mouse.update(Shared.axis_mask(sec), delta)
 	var s : bool = Shared.source_activity(comp, sec, skey, secondary_mouse) == 1

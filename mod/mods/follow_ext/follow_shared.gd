@@ -6,8 +6,24 @@ const NONE := 15
 const MOUSE := 0
 const MOUSE_X := 18
 const MOUSE_Y := 19
+const CTRL_LEFT_X := 20
+const CTRL_LEFT_Y := 21
+const CTRL_RIGHT_X := 22
+const CTRL_RIGHT_Y := 23
 const MOUSE_TYPES := [MOUSE, MOUSE_X, MOUSE_Y]
-const CONTROLLER_TYPES := [1, 2, 10, 11, 12]
+## One axis of a stick (the mod's options 20..23).
+const STICK_AXIS_TYPES := [CTRL_LEFT_X, CTRL_LEFT_Y, CTRL_RIGHT_X, CTRL_RIGHT_Y]
+const CONTROLLER_TYPES := [1, 2, 10, 11, 12, CTRL_LEFT_X, CTRL_LEFT_Y, CTRL_RIGHT_X, CTRL_RIGHT_Y]
+## Options that only use the vertical axis of their input.
+const Y_AXIS_TYPES := [MOUSE_Y, CTRL_LEFT_Y, CTRL_RIGHT_Y]
+
+## Options the mod appends to the vanilla Follow Option selectors, in index order
+## (the game stores the selected index): [follow type, label key, suffix].
+const EXTRA_PRIMARY_ITEMS := [
+	[MOUSE_X, "TR_MOUSE", " X"], [MOUSE_Y, "TR_MOUSE", " Y"],
+	[CTRL_LEFT_X, "TR_CONTROLLER_LEFT", " X"], [CTRL_LEFT_Y, "TR_CONTROLLER_LEFT", " Y"],
+	[CTRL_RIGHT_X, "TR_CONTROLLER_RIGHT", " X"], [CTRL_RIGHT_Y, "TR_CONTROLLER_RIGHT", " Y"],
+]
 const KEYBOARD_TYPES := [3, 4, 5, 6, 7, 8]
 
 ## Secondary source per selector, stored per state in sprite_data like the
@@ -61,13 +77,14 @@ static func is_supported_secondary(t: int) -> bool:
 ## Which pre-swap axes a source drives.
 static func axis_mask(t: int) -> Vector2:
 	match t:
-		MOUSE_X: return Vector2(1, 0)
-		MOUSE_Y: return Vector2(0, 1)
+		MOUSE_X, CTRL_LEFT_X, CTRL_RIGHT_X: return Vector2(1, 0)
+		MOUSE_Y, CTRL_LEFT_Y, CTRL_RIGHT_Y: return Vector2(0, 1)
 	return Vector2.ONE
 
-## Controller / keyboard axis for a follow type. `comp` is a follow component
-## (has axis_* filled by update_controller_inputs()); `key` is the sprite_data
-## key holding `t`, which the game's keyboard helper reads back.
+## Controller / keyboard axis for a follow type (single-axis options come back
+## with the other axis zeroed). `comp` is a follow component (has axis_* filled
+## by update_controller_inputs()); `key` is the sprite_data key holding `t`,
+## which the game's keyboard helper reads back.
 static func input_axis(comp, t: int, key: String) -> Vector2:
 	match t:
 		1: return comp.axis_left
@@ -75,6 +92,8 @@ static func input_axis(comp, t: int, key: String) -> Vector2:
 		10: return comp.axis_shoulderl
 		11: return comp.axis_shoulderr
 		12: return comp.axis_lr_3
+		CTRL_LEFT_X, CTRL_LEFT_Y: return comp.axis_left * axis_mask(t)
+		CTRL_RIGHT_X, CTRL_RIGHT_Y: return comp.axis_right * axis_mask(t)
 	if t in KEYBOARD_TYPES:
 		return GlobalCalculations.some_keyboard_calc_wasd(key, comp.actor)
 	return Vector2.ZERO

@@ -4,6 +4,8 @@ extends "res://Scripts/Objects/ObjectComponents/follow_rotation.gd"
 ##   Mouse Y uses the vertical mouse position (top -> rot_min, bottom -> rot_max).
 ##   With follow_mouse_velocity, that axis' mouse speed drives the rotation
 ##   (vanilla's velocity rotation never receives a velocity, so it stays at 0).
+## - "Controller (Left/Right) X/Y" (20..23): X is the game's controller rotation;
+##   Y rotates with the vertical stick axis (up -> rot_min, down -> rot_max).
 ## - Secondary source (jz_follow_type2_b) layered on the vanilla result:
 ##   Sum adds its offset from rest (clamped to rot_min..rot_max); Priority and
 ##   Last active ease between primary and secondary (see source_picker.gd).
@@ -59,14 +61,17 @@ func update_rotation(delta: float) -> void:
 	last_written = out
 	sec_on = true
 
-## Vanilla update_rotation(), plus Mouse X / Mouse Y.
+## Vanilla update_rotation(), plus Mouse X/Y and single stick axes.
 func _update_primary(delta: float) -> void:
 	var follow_type2 = actor.get_value("follow_type2")
-	if follow_type2 != Shared.MOUSE_X and follow_type2 != Shared.MOUSE_Y:
+	var target_rot
+	if follow_type2 == Shared.MOUSE_X or follow_type2 == Shared.MOUSE_Y:
+		target_rot = _mouse_rotation(follow_type2)
+	elif follow_type2 in Shared.STICK_AXIS_TYPES:
+		target_rot = _input_rotation(follow_type2, "follow_type2")
+	else:
 		super.update_rotation(delta)
 		return
-
-	var target_rot = _mouse_rotation(follow_type2)
 
 	var t = actor.get_value("mouse_delay") * delta * 60.0
 	t = clamp(t, 0.0, 1.0)
@@ -89,11 +94,18 @@ func _norm_to_rotation(normalized_mouse: float) -> float:
 	var rotation_factor = lerp_angle(float(actor.get_value("rot_min")), float(actor.get_value("rot_max")), max((normalized_mouse + 1) / 2, 0.0))
 	return GlobalCalculations.is_nan_or_inf(clamp_rotations(rotation_factor))
 
+## Rotation from a stick/keys, like the game's controller rotation (which uses
+## the horizontal axis); the Y options use the vertical one instead (up ->
+## rot_min, down -> rot_max).
+func _input_rotation(t: int, key: String) -> float:
+	var axis := Shared.input_axis(self, t, key)
+	return follow_controller_rotation(Vector2(axis.y if t in Shared.Y_AXIS_TYPES else axis.x, 0))
+
 ## Rotation target a secondary source asks for (before smoothing).
 func _rot_raw(sec: int) -> float:
 	if sec in Shared.MOUSE_TYPES:
 		return _mouse_rotation(sec)
-	return follow_controller_rotation(Shared.input_axis(self, sec, SEC_KEY))
+	return _input_rotation(sec, SEC_KEY)
 
 ## What a secondary source gives with no input (stick centered, no key, cursor
 ## on the sprite and still).

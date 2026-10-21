@@ -1,0 +1,9 @@
+# Re-downloadable tools (see README: GDRE Tools v2.7.4)
+/tools/
+# Decompiled PNGTube Remix 1.4.5 (regenerate with GDRE; it's the app's own code)
+/recovered_1.4.5/
+/recover.log
+# Personal model / preferences backups
+/backups/
+# Build output (published as GitHub Releases)
+/dist/

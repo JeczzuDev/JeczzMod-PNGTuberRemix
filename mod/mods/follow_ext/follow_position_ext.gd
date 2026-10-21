@@ -1,7 +1,8 @@
 extends "res://Scripts/Objects/ObjectComponents/follow_component.gd"
 ## Position follow extensions (JeczzMod):
 ## - "Mouse X" (18) / "Mouse Y" (19) for the Follow Option selector: same math as
-##   "Mouse" (0) but only the chosen mouse axis drives the sprite.
+##   "Mouse" (0) but only the chosen mouse axis drives the sprite. Likewise
+##   "Controller (Left/Right) X/Y" (20..23) for one axis of a stick.
 ## - Secondary source (jz_follow_type_b) layered on the vanilla result:
 ##   Sum adds its offset from rest (clamped to the configured range); Priority
 ##   and Last active ease between primary and secondary (see source_picker.gd).
@@ -87,26 +88,23 @@ func update_position(dir: Vector2, dist: float, _delta: float) -> void:
 	last_written = out
 	sec_on = true
 
-## Vanilla update_position(), plus Mouse X / Mouse Y and full stick/key reach.
+## Vanilla update_position(), plus Mouse X/Y, single stick axes and full
+## stick/key reach.
 func _update_primary(dir: Vector2, dist: float, _delta: float) -> void:
 	var follow_type: int = actor.get_value("follow_type")
 	if follow_type in Shared.CONTROLLER_TYPES or follow_type in Shared.KEYBOARD_TYPES:
 		follow_position_calculations(Shared.input_axis(self, follow_type, "follow_type"), STICK_REACH)
-		_apply_target(_delta)
-		return
-	if follow_type != Shared.MOUSE_X and follow_type != Shared.MOUSE_Y:
+	elif follow_type == Shared.MOUSE_X or follow_type == Shared.MOUSE_Y:
+		var m := _mouse_input(follow_type)
+		follow_position_calculations(m[0], m[1])
+	else:
 		super.update_position(dir, dist, _delta)
 		return
 
-	var m := _mouse_input(follow_type)
-	follow_position_calculations(m[0], m[1])
-
 	# snap_pos leaves an axis untouched when its dir is 0; ease the unused one home.
-	var delay = actor.get_value("mouse_delay")
-	if follow_type == Shared.MOUSE_X:
-		target_pos.y = lerp(target_pos.y, 0.0, delay)
-	else:
-		target_pos.x = lerp(target_pos.x, 0.0, delay)
+	var mask := Shared.axis_mask(follow_type)
+	if mask != Vector2.ONE:
+		target_pos = target_pos.lerp(target_pos * mask, actor.get_value("mouse_delay"))
 
 	_apply_target(_delta)
 

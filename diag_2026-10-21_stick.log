@@ -1,0 +1,55 @@
+PNGTube Remix 1.4.5 / 2026-10-21T07:19:14
+action ControllerLeft deadzone=0.20000000298023
+action ControllerRight deadzone=0.20000000298023
+action ControllerUp deadzone=0.20000000298023
+action ControllerDown deadzone=0.20000000298023
+action ControllerFour deadzone=0.20000000298023
+action ControllerTwo deadzone=0.20000000298023
+action ControllerOne deadzone=0.20000000298023
+action ControllerThree deadzone=0.20000000298023
+joypad 0 'XInput Controller'
+---- sprite '@Node2D@1340' types=[0, 15, 15] secondary=[2, <null>, <null>] blend=1
+   pos_x_min = 0.0
+   pos_x_max = 36.0
+   pos_y_min = -10.0
+   pos_y_max = 10.0
+   rot_min = 0
+   rot_max = 0
+   scale_x_min = 0.0
+   scale_x_max = 0.001
+   scale_y_min = 0.0
+   scale_y_max = 0.22
+   mouse_delay = 0.5
+   snap_pos = true
+   pos_swap_x = false
+   pos_swap_y = false
+   pos_invert_x = false
+   pos_invert_y = false
+   follow_mouse_velocity = false
+   shared_movement = true
+   use_object_pos = false
+   reach stick: right=(18.0, 0.0) left=(0.0, 0.0) down=(0.0, 10.0) up=(0.0, -10.0) diag=(12.72792, 7.071068)
+   reach mouse: right=(36.0, 0.0) left=(0.0, 0.0) down=(0.0, 10.0) up=(0.0, -10.0) diag=(25.45584, 7.071068)
+---- live (one line per second while a stick moves; select a sprite to see its values)
+stick raw={ "j0.a2": -1.0, "j0.a3": 0.26387429237366 } game={ "right": "(-0.999609, -0.027959) len=1.00" } sprite_peak={ "pos": (17.92213, -0.83158), "use_secondary": true, "sec_target": (17.92345, -0.834073), "sprite": &"@Node2D@1340" }
+stick raw={ "j0.a2": 1.0, "j0.a3": -0.08122378587723 } game={ "right": "(0.997753, -0.067004) len=1.00" } sprite_peak={ "pos": (17.96392, -0.632749), "use_secondary": true, "sec_target": (17.96392, -0.632749), "sprite": &"@Node2D@1340" }
+stick raw={ "j0.a2": 1.0, "j0.a3": -0.19749754667282 } game={ "right": "(-0.99982, -0.018994) len=1.00" } sprite_peak={ "pos": (17.90932, -1.002028), "use_secondary": true, "sec_target": (17.90932, -1.002028), "sprite": &"@Node2D@1340" }
+stick raw={ "j0.a2": -1.0, "j0.a3": -0.28151369094849 } game={ "right": "(-0.998607, -0.052768) len=1.00" } sprite_peak={ "pos": (17.92827, -0.891755), "use_secondary": true, "sec_target": (17.92827, -0.891755), "sprite": &"@Node2D@1340" }
+stick raw={ "j0.a2": -1.0, "j0.a3": -0.46340125799179 } game={ "right": "(-0.999608, -0.027989) len=1.00" } sprite_peak={ "pos": (17.98816, -0.311776), "use_secondary": true, "sec_target": (17.98816, -0.311776), "sprite": &"@Node2D@1340" }
+stick raw={ "j0.a2": -1.0, "j0.a3": -0.49153888225555 } game={ "right": "(-0.997547, -0.070004) len=1.00" } sprite_peak={ "pos": (17.80494, -1.468161), "use_secondary": true, "sec_target": (17.80494, -1.468161), "sprite": &"@Node2D@1340" }
+stick raw={ "j0.a2": -1.0, "j0.a3": -0.54235142469406 } game={ "right": "(-0.999603, -0.028172) len=1.00" } sprite_peak={ "pos": (17.84539, -1.307822), "use_secondary": true, "sec_target": (17.84539, -1.307822), "sprite": &"@Node2D@1340" }
+stick raw={ "j0.a2": -1.0, "j0.a3": -0.70150303840637 } game={ "right": "(-0.930282, -0.366846) len=1.00" } sprite_peak={ "pos": (17.96788, -0.596851), "use_secondary": true, "sec_target": (17.96788, -0.596851), "sprite": &"@Node2D@1340" }
+stick raw={ "j0.a2": 1.0, "j0.a3": -0.18684673309326 } game={ "right": "(0.998257, -0.059026) len=1.00" } sprite_peak={ "pos": (17.97778, -0.496645), "use_secondary": true, "sec_target": (17.97778, -0.496645), "sprite": &"@Node2D@1340" }
+stick raw={ "j0.a2": -1.0, "j0.a3": -0.22798502445221 } game={ "right": "(-0.995311, -0.096729) len=1.00" } sprite_peak={ "pos": (17.95972, -0.668547), "use_secondary": true, "sec_target": (17.95972, -0.668547), "sprite": &"@Node2D@1340" }
+stick raw={ "j0.a2": -1.0, "j0.a3": -0.17543298006058 } game={ "right": "(-0.993845, -0.110781) len=1.00" } sprite_peak={ "pos": (17.95863, -0.677637), "use_secondary": true, "sec_target": (17.95863, -0.677637), "sprite": &"@Node2D@1340" }
+stick raw={ "j0.a2": 1.0, "j0.a3": -0.08091861009598 } game={ "right": "(0.997702, -0.067762) len=1.00" } sprite_peak={ "pos": (17.98451, -0.40906), "use_secondary": true, "sec_target": (17.98451, -0.40906), "sprite": &"@Node2D@1340" }
+stick raw={ "j0.a2": -1.0, "j0.a3": -0.47701227664948 } game={ "right": "(-0.999468, -0.032622) len=1.00" } sprite_peak={ "pos": (17.11348, -2.580093), "use_secondary": true, "sec_target": (17.13207, -2.627038), "sprite": &"@Node2D@1340" }
+stick raw={ "j0.a2": 1.0, "j0.a3": -0.2732127904892 } game={ "right": "(0.991826, -0.127597) len=1.00" } sprite_peak={ "pos": (17.94787, -0.760508), "use_secondary": true, "sec_target": (17.94787, -0.760508), "sprite": &"@Node2D@1340" }
+stick raw={ "j0.a2": 1.0, "j0.a3": -0.19786375761032 } game={ "right": "(0.998202, -0.059936) len=1.00" } sprite_peak={ "pos": (17.98278, -0.431922), "use_secondary": true, "sec_target": (17.98278, -0.431922), "sprite": &"@Node2D@1340" }
+stick raw={ "j0.a2": 1.0, "j0.a3": 0.89245438575745 } game={ "right": "(0.995565, -0.09408) len=1.00" } sprite_peak={ "pos": (17.98936, -0.342905), "use_secondary": true, "sec_target": (17.98937, -0.342909), "sprite": &"@Node2D@1340" }
+stick raw={ "j0.a2": 1.0, "j0.a3": 1.0 } game={ "right": "(0.57156, 0.82056) len=1.00" } sprite_peak={ "pos": (16.54057, -2.018453), "use_secondary": true, "sec_target": (16.54057, -2.018453), "sprite": &"@Node2D@1340" }
+stick raw={ "j0.a2": 0.32790112495422, "j0.a3": 1.0 } game={ "right": "(0.292571, -0.956244) len=1.00" } sprite_peak={ "pos": (12.5336, 9.363944), "use_secondary": false, "sec_target": (0.003179, -0.00661), "sprite": &"@Node2D@1340" }
+stick raw={ "j0.a2": -0.25838100910187, "j0.a3": 1.0 } game={ "right": "(0.089289, 0.996006) len=1.00" } sprite_peak={ "pos": (9.433363, 7.479066), "use_secondary": false, "sec_target": (0.325387, 1.773332), "sprite": &"@Node2D@1340" }
+stick raw={ "j0.a2": -1.0, "j0.a3": -0.9833676815033 } game={ "right": "(0.421014, -0.907054) len=1.00" } sprite_peak={ "pos": (8.073668, 8.936646), "use_secondary": true, "sec_target": (8.073668, 8.936646), "sprite": &"@Node2D@1340" }
+stick raw={ "j0.a2": -1.0, "j0.a3": -0.61965358257294 } game={ "right": "(-0.996591, -0.082498) len=1.00" } sprite_peak={ "pos": (17.94867, -0.754668), "use_secondary": true, "sec_target": (17.94867, -0.754668), "sprite": &"@Node2D@1340" }
+stick raw={ "j0.a2": -1.0, "j0.a3": 0.12510871887207 } game={ "right": "(-0.999759, 0.021952) len=1.00" } sprite_peak={ "pos": (17.98109, -0.450463), "use_secondary": true, "sec_target": (17.98113, -0.450538), "sprite": &"@Node2D@1340" }

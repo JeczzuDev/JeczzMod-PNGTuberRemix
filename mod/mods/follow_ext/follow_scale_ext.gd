@@ -4,6 +4,8 @@ extends "res://Scripts/Objects/ObjectComponents/follow_scale.gd"
 ##   scales horizontally from the horizontal mouse position and Mouse Y only
 ##   vertically from the vertical one. With follow_mouse_velocity, that axis'
 ##   mouse speed moves the scale from min (still) to max (fast).
+## - "Controller (Left/Right) X/Y" (20..23): the game's controller scale for that
+##   stick axis only; the other scale axis stays at 1.
 ## - Secondary source (jz_follow_type3_b) layered on the vanilla result:
 ##   Sum adds its offset from rest (clamped to the configured range); Priority
 ##   and Last active ease between primary and secondary (see source_picker.gd).
@@ -75,20 +77,25 @@ func update_scale(delta: float) -> void:
 	last_written = modifier.scale
 	sec_on = true
 
-## Vanilla update_scale(), plus Mouse X / Mouse Y.
+## Vanilla update_scale(), plus Mouse X/Y and single stick axes (the other
+## scale axis stays at 1).
 func _update_primary(delta: float) -> void:
 	var follow_type3: int = actor.get_value("follow_type3")
-	if follow_type3 != Shared.MOUSE_X and follow_type3 != Shared.MOUSE_Y:
+	var axis_val : Vector2
+	if follow_type3 == Shared.MOUSE_X or follow_type3 == Shared.MOUSE_Y:
+		axis_val = _mouse_val(follow_type3)
+	elif follow_type3 in Shared.STICK_AXIS_TYPES:
+		axis_val = follow_controller_scale(Shared.input_axis(self, follow_type3, "follow_type3"))
+	else:
 		super.update_scale(delta)
 		return
 
-	var use_y : bool = follow_type3 == Shared.MOUSE_Y
+	var use_y : bool = follow_type3 in Shared.Y_AXIS_TYPES
 	var invert_x: bool = actor.get_value("scale_invert_x")
 	var invert_y: bool = actor.get_value("scale_invert_y")
 	var swap_x: bool = actor.get_value("scale_swap_x")
 	var swap_y: bool = actor.get_value("scale_swap_y")
 
-	var axis_val := _mouse_val(follow_type3)
 	var x_val: float = axis_val.x if not use_y else 0.0
 	var y_val: float = axis_val.y if use_y else 0.0
 
