@@ -1,10 +1,11 @@
-JeczzMod - Mouse X / Mouse Y para Follow Movement
-Version del mod: 1.0.0
+JeczzMod - Extensiones para Follow Movement
+Version del mod: 1.1.0
 Para: PNGTube Remix 1.4.5 (Windows)
 ==================================================
 
 QUE HACE
 --------
+1) Mouse X / Mouse Y
 Agrega dos opciones a los selectores "Follow Option" de la seccion
 Follow Movement (Position, Rotation y Scale):
 
@@ -23,6 +24,33 @@ mouse solo en el eje elegido. En Rotation y Scale esto si funciona con
 Mouse X / Mouse Y (en la 1.4.5 original, "Mouse" con velocidad no hace nada
 en rotacion ni escala).
 
+2) Fuente secundaria (desde 1.1.0)
+Debajo de cada selector aparece "+ Secondary": una segunda fuente que se
+combina con la principal (por ejemplo, mouse + control). Opciones: Mouse,
+Mouse X, Mouse Y, Control izquierdo/derecho, R1+L1, R2+L2, R3+L3, WASD y
+Flechas. Debajo de Scale, "Combine" elige como se combinan (por sprite):
+
+  Last active         (por defecto) Solo manda la ultima fuente que se uso
+                      (stick fuera del centro, tecla presionada o mouse en
+                      movimiento); la otra se ignora hasta que se use. Si
+                      ninguna se usa, sigue mandando la ultima: al soltar el
+                      stick el sprite no vuelve al mouse hasta que lo muevas.
+  Sum                 Los dos efectos se suman. La secundaria en reposo
+                      (stick suelto, sin teclas) no aporta nada. El
+                      resultado nunca pasa del rango min/max configurado.
+  Secondary priority  Mientras la secundaria se usa (stick fuera del centro,
+                      tecla presionada o mouse en movimiento) el sprite la
+                      sigue a ella; al soltar vuelve suave a la principal.
+
+Alcance del stick y teclado en Position: llegan al limite configurado de cada
+lado segun la inclinacion, igual que el mouse (en la 1.4.5 original, con un
+rango de un solo lado o asimetrico, p. ej. min 0 / max 36, el stick solo
+llegaba a la mitad). Con "Position Snap" activado, al soltar el stick el
+sprite se queda donde estaba, tambien como fuente secundaria.
+
+La secundaria necesita una principal distinta de "None". UDP/tracking
+funciona como principal pero no esta en la lista de secundarias.
+
 El mod no modifica ningun archivo de la app: solo agrega archivos al lado
 del ejecutable.
 
@@ -30,23 +58,25 @@ del ejecutable.
 INSTALAR
 --------
 1. Cierra PNGTube Remix.
-2. Copia "override.cfg" y la carpeta "mods" dentro de la carpeta donde esta
+2. Si tenias una version anterior del mod, borra antes la carpeta "mods"
+   (o ejecuta "Desinstalar JeczzMod.bat").
+3. Copia "override.cfg" y la carpeta "mods" dentro de la carpeta donde esta
    "PNGTube Remix.exe".
    - Si ya existia un "override.cfg", no lo reemplaces: agrega esta linea
      debajo de [autoload] (crea la seccion si no existe):
        JeczzModLoader="*res://mods/jeczz_mod_loader.gd"
-3. Abre la app. Las opciones "Mouse X" y "Mouse Y" aparecen al final de
-   cada selector Follow Option.
+4. Abre la app. Las opciones "Mouse X" y "Mouse Y" aparecen al final de
+   cada selector Follow Option, y debajo de cada uno la fila "+ Secondary".
 
 Para comprobar que cargo, abre "PNGTube Remix.console.exe": en la consola
-debe aparecer  [JeczzMod] v1.0.0 loaded 3/3 script swaps
+debe aparecer  [JeczzMod] v1.1.0 loaded 3/3 script swaps
 
 
 DESINSTALAR
 -----------
 Copia "Desinstalar JeczzMod.bat" a la carpeta de la app y ejecutalo, o
 borra a mano "override.cfg" (si solo tiene la linea del mod),
-"mods\jeczz_mod_loader.gd" y "mods\follow_mouse_axis".
+"mods\jeczz_mod_loader.gd" y "mods\follow_ext".
 
 
 IMPORTANTE
@@ -54,6 +84,8 @@ IMPORTANTE
 - Modelos guardados con Mouse X / Mouse Y y abiertos en la app SIN el mod:
   esos sprites no seguiran al mouse en ese selector y el selector se vera
   vacio. Vuelve a elegir una opcion o reinstala el mod.
+- La fuente secundaria se guarda en el modelo; la app sin el mod la ignora
+  y el sprite sigue solo a la principal.
 - Si actualizas PNGTube Remix a otra version, el mod se desactiva solo
   (la app funciona normal) hasta que haya una version del mod para ella.
   En la consola veras: "mod disabled".

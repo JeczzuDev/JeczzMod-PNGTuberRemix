@@ -8,7 +8,7 @@ extends Node
 ## tree with one of the original scripts gets its script swapped for a mod
 ## subclass before its _ready, keeping all script variable values.
 
-const MOD_VERSION := "1.0.0"
+const MOD_VERSION := "1.1.0"
 const MOD_DIR := "res://mods"
 const LOG_PREFIX := "[JeczzMod] "
 ## The subclasses copy parts of these exact game scripts; on any other game
@@ -17,10 +17,11 @@ const SUPPORTED_GAME_VERSIONS := ["1.4.5"]
 
 ## Original script path -> mod subclass path.
 const SCRIPT_SWAPS := {
-	"res://Scripts/Objects/ObjectComponents/follow_component.gd": "res://mods/follow_mouse_axis/follow_position_axis.gd",
-	"res://Scripts/Objects/ObjectComponents/follow_rotation.gd": "res://mods/follow_mouse_axis/follow_rotation_axis.gd",
-	"res://Scripts/Objects/ObjectComponents/follow_scale.gd": "res://mods/follow_mouse_axis/follow_scale_axis.gd",
+	"res://Scripts/Objects/ObjectComponents/follow_component.gd": "res://mods/follow_ext/follow_position_ext.gd",
+	"res://Scripts/Objects/ObjectComponents/follow_rotation.gd": "res://mods/follow_ext/follow_rotation_ext.gd",
+	"res://Scripts/Objects/ObjectComponents/follow_scale.gd": "res://mods/follow_ext/follow_scale_ext.gd",
 }
+const SECONDARY_UI := "res://mods/follow_ext/secondary_ui.gd"
 
 ## Follow selectors (unique names in movement.tscn). The game stores the selected
 ## item INDEX, so new options must be appended after the 18 built-in items.
@@ -68,6 +69,9 @@ func _on_node_added(n: Node) -> void:
 		_swap_script(n, _swaps[s.resource_path])
 	elif n is OptionButton and String(n.name) in FOLLOW_SELECTORS:
 		_add_mouse_axis_items(n)
+		if n.name == FOLLOW_SELECTORS[-1]:
+			# The panel is still adding children; build once it's done.
+			_attach_secondary_ui.call_deferred(n)
 
 func _swap_script(n: Node, sub: Script) -> void:
 	var values := {}
@@ -84,6 +88,20 @@ func _add_mouse_axis_items(ob: OptionButton) -> void:
 	var mouse := tr("TR_MOUSE")
 	ob.add_item(mouse + " X", MOUSE_X)
 	ob.add_item(mouse + " Y", MOUSE_Y)
+
+func _attach_secondary_ui(last_selector: OptionButton) -> void:
+	if not is_instance_valid(last_selector) or not last_selector.is_inside_tree():
+		return
+	var vbox := last_selector.get_parent().get_parent() as Container
+	var ui_script : Script = load(SECONDARY_UI)
+	if vbox == null or ui_script == null or vbox.has_node(ui_script.BLEND_ROW):
+		return
+	var ui = ui_script.new()
+	ui.name = "JzSecondaryUI"
+	vbox.add_child(ui)
+	if not ui.build(vbox):
+		push_warning(LOG_PREFIX + "Movement panel layout not recognized; secondary selectors not added")
+		ui.queue_free()
 
 ## Test installs only (enabled by a mods/SANDBOX file): never auto-load a model
 ## from outside this install's folder, because save_on_exit/auto_save write back

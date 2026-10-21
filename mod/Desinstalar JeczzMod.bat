@@ -7,6 +7,8 @@ if not exist "PNGTube Remix.exe" (
 	exit /b 1
 )
 
+if exist "mods\follow_ext" rmdir /s /q "mods\follow_ext"
+rem Folder used by v1.0.0
 if exist "mods\follow_mouse_axis" rmdir /s /q "mods\follow_mouse_axis"
 if exist "mods\jeczz_mod_loader.gd" del /q "mods\jeczz_mod_loader.gd"
 if exist "mods\SANDBOX" del /q "mods\SANDBOX"
