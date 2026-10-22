@@ -19,6 +19,7 @@ var vel_norm : Vector2 = Vector2.ZERO
 
 var sec_on : bool = false
 var sec_rot : float = 0.0
+var sec_out : float = 0.0
 var sec_weight : float = 0.0
 var last_primary : float = 0.0
 var last_written : float = 0.0
@@ -52,8 +53,13 @@ func update_rotation(delta: float) -> void:
 	var out : float
 
 	if Shared.blend_mode(actor) != Shared.BLEND_SUM:
+		# While the secondary isn't driving, its output follows the sprite, so
+		# taking over starts from the sprite's current angle instead of its rest.
+		if sec_weight < Shared.WEIGHT_IDLE:
+			sec_out = last_primary
+		sec_out = lerp_angle(sec_out, _rot_raw(sec), t)
 		sec_weight = lerp(sec_weight, 1.0 if use_sec else 0.0, t)
-		out = lerp_angle(last_primary, sec_rot, sec_weight)
+		out = lerp_angle(last_primary, sec_out, sec_weight)
 	else:
 		out = _clamp_to_range(last_primary + angle_difference(_rot_rest(sec), sec_rot))
 

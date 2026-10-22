@@ -22,6 +22,7 @@ var axis_last_dist : Vector2 = Vector2.ZERO
 
 var sec_on : bool = false
 var sec_target : Vector2 = Vector2.ZERO
+var sec_out : Vector2 = Vector2.ZERO
 var sec_weight : float = 0.0
 var last_primary : Vector2 = Vector2.ZERO
 var last_written : Vector2 = Vector2.ZERO
@@ -73,9 +74,14 @@ func update_position(dir: Vector2, dist: float, _delta: float) -> void:
 	var out : Vector2
 
 	if Shared.blend_mode(actor) != Shared.BLEND_SUM:
+		# While the secondary isn't driving, its output follows the sprite, so
+		# taking over starts from where the sprite is instead of dipping to rest.
+		if sec_weight < Shared.WEIGHT_IDLE:
+			sec_out = last_primary
+		sec_out = sec_out.lerp(Shared.to_final(raw, swap_x, swap_y, invert_x, invert_y), delay)
 		sec_weight = lerp(sec_weight, 1.0 if use_sec else 0.0, delay)
 		var w := Shared.mask_to_final(mask, swap_x, swap_y) * sec_weight
-		out = Vector2(lerp(last_primary.x, sec_final.x, w.x), lerp(last_primary.y, sec_final.y, w.y))
+		out = Vector2(lerp(last_primary.x, sec_out.x, w.x), lerp(last_primary.y, sec_out.y, w.y))
 	else:
 		# Position rest is 0, so the secondary target is already its offset.
 		var lo := _pos_raw(Vector2(-1, -1), Vector2(BIG, BIG))

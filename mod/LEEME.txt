@@ -1,5 +1,5 @@
 JeczzMod - Extensiones para Follow Movement
-Version del mod: 1.3.0
+Version del mod: 1.3.1
 Para: PNGTube Remix 1.4.5 (Windows)
 ==================================================
 
@@ -85,7 +85,7 @@ INSTALAR
    cada selector Follow Option, y debajo de cada uno la fila "+ Secondary".
 
 Para comprobar que cargo, abre "PNGTube Remix.console.exe": en la consola
-debe aparecer  [JeczzMod] v1.3.0 loaded 3/3 script swaps
+debe aparecer  [JeczzMod] v1.3.1 loaded 3/3 script swaps
 
 
 DESINSTALAR

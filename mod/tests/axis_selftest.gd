@@ -139,6 +139,13 @@ func _ready() -> void:
 		return
 	var sec_ob : OptionButton = rows[0].get_child(1)
 	var blend_ob : OptionButton = blend_rows[0].get_child(1)
+	# Make the test sprite look like an old model (no mod keys), in memory only.
+	for st in sp.states + [d]:
+		if st is Dictionary:
+			for k in ["jz_follow_type_b", "jz_follow_type2_b", "jz_follow_type3_b", "jz_follow_blend"]:
+				st.erase(k)
+	Global.reinfo.emit()
+	await get_tree().process_frame
 	check("secondary shows None for an old model (got id %d)" % sec_ob.get_selected_id(), sec_ob.get_selected_id() == 15)
 	check("combine shows Last active by default (got id %d)" % blend_ob.get_selected_id(), blend_ob.get_selected_id() == 2)
 	Global.held_sprites = [sp]
@@ -336,6 +343,27 @@ func _ready() -> void:
 	check("last active + Controller (Right) secondary: pressing A doesn't take over", not fp.picker.use_secondary)
 	press_button(0, false)
 	check("secondary list has D-pad and Face buttons", sec_ob.get_item_index(24) >= 0 and sec_ob.get_item_index(25) >= 0)
+
+	# 13. Taking over doesn't dip toward the secondary's rest first (smooth
+	# mouse_delay, like real sprites): both sources push to the same spot.
+	d.mouse_delay = 0.1
+	set_secondary(d, 1, 2)
+	Input.action_press("ControllerTwo", 1.0)
+	s = await sample(sp, fp, fr, fs, 2, 2, 2, 120)
+	var settled : Vector2 = s.pos
+	Input.action_press("ControllerRight", 1.0)
+	var min_x := INF
+	var min_rot := INF
+	var max_scl_x := -INF
+	for i in 60:
+		await get_tree().physics_frame
+		min_x = min(min_x, fp.modifier.position.x)
+		min_rot = min(min_rot, fr.modifier.rotation)
+		max_scl_x = max(max_scl_x, fs.modifier.scale.x)
+	check("no dip when the secondary takes over: pos x settled %.2f, min %.2f; rot min %.3f; scale x max %.3f" % [settled.x, min_x, min_rot, max_scl_x],
+		settled.x > 49.0 and min_x > settled.x - 0.5 and min_rot > 0.49 and max_scl_x < 0.71)
+	release_sticks()
+	d.mouse_delay = 1.0
 	set_secondary(d, 15, 0)
 	finish()
 

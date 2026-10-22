@@ -79,6 +79,8 @@ Los ajustes nuevos se guardan en el modelo, por estado, como claves `jz_follow_*
 - **Inspector de modelos** (`mod/tests/model_inspect.gd`): lee un `.pngRemix` como datos, sin cargarlo en la app, y escribe en `mods/_tests/inspect.log` el árbol de sprites con su Follow Movement y sus físicas.
   - Se registra como autoload extra en la copia de pruebas.
   - Se ejecuta con `"PNGTube Remix.console.exe" -- --jz-inspect=<ruta del modelo>`.
+- **Prueba de físicas con stick** (`mod/tests/stick_physics_trial.gd`): solo para la copia de pruebas con `SANDBOX`. Añade "+ Secondary: Controller (Left) X" a la raíz y a la cabeza, simula el stick, registra el estiramiento y el balanceo de los sprites indicados y guarda el modelo de prueba.
+  - Se ejecuta con `-- --jz-root=<sprite> --jz-head=<sprite> --jz-watch=<sprite>,<sprite>`.
 
 ## Versiones
 
@@ -88,6 +90,7 @@ Los ajustes nuevos se guardan en el modelo, por estado, como claves `jz_follow_*
 | 1.1.0 | Fuente secundaria y Combine (Last active, Sum, Secondary priority); alcance completo del stick y Position Snap en Position |
 | 1.2.0 | Ejes individuales de los sticks |
 | 1.3.0 | Sticks separados de la cruceta y de A/B/X/Y; fuentes nuevas `D-pad` y `Face buttons` |
+| 1.3.1 | Last active / Secondary priority: al cambiar de fuente, el sprite ya no da un tirón hacia el centro |
 
 ## Licencia
 

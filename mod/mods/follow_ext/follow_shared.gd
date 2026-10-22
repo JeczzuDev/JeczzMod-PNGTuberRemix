@@ -71,6 +71,10 @@ const BLEND_LAST_ACTIVE := 2
 ## Used when a sprite has no BLEND_KEY yet.
 const BLEND_DEFAULT := BLEND_LAST_ACTIVE
 
+## Below this blend weight the secondary isn't driving at all (Priority / Last
+## active); its smoothed output then just follows the sprite.
+const WEIGHT_IDLE := 0.001
+
 ## Stick/key strength that counts as using a controller/keyboard source.
 const DEADZONE := 0.15
 ## Cursor movement (px per physics frame) that counts as using the mouse.

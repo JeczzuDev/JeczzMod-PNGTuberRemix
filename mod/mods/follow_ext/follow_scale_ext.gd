@@ -20,6 +20,7 @@ var vel_norm : Vector2 = Vector2.ZERO
 
 var sec_on : bool = false
 var sec_val : Vector2 = Vector2.ZERO
+var sec_out : Vector2 = Vector2.ONE
 var sec_weight : float = 0.0
 var last_primary : Vector2 = Vector2.ONE
 var last_written : Vector2 = Vector2.ONE
@@ -59,10 +60,14 @@ func update_scale(delta: float) -> void:
 	var out : Vector2
 
 	if Shared.blend_mode(actor) != Shared.BLEND_SUM:
+		# While the secondary isn't driving, its output follows the sprite, so
+		# taking over starts from the sprite's current scale instead of its rest.
+		if sec_weight < Shared.WEIGHT_IDLE:
+			sec_out = last_primary
+		sec_out = sec_out.lerp(Vector2.ONE - Shared.to_final(_scl_raw(sec), swap_x, swap_y, invert_x, invert_y), t)
 		sec_weight = lerp(sec_weight, 1.0 if use_sec else 0.0, t)
-		var sec_scale := Vector2.ONE - Shared.to_final(sec_val, swap_x, swap_y, invert_x, invert_y)
 		var w := Shared.mask_to_final(mask, swap_x, swap_y) * sec_weight
-		out = Vector2(lerp(last_primary.x, sec_scale.x, w.x), lerp(last_primary.y, sec_scale.y, w.y))
+		out = Vector2(lerp(last_primary.x, sec_out.x, w.x), lerp(last_primary.y, sec_out.y, w.y))
 	else:
 		var offset := - Shared.to_final((sec_val - _scl_rest(sec)) * mask, swap_x, swap_y, invert_x, invert_y)
 		# Value range of one source: -lerp(max, min, n) for n in 0..1.

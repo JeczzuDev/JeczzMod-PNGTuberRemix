@@ -8,7 +8,7 @@ extends Node
 ## tree with one of the original scripts gets its script swapped for a mod
 ## subclass before its _ready, keeping all script variable values.
 
-const MOD_VERSION := "1.3.0"
+const MOD_VERSION := "1.3.1"
 const MOD_DIR := "res://mods"
 const LOG_PREFIX := "[JeczzMod] "
 ## The subclasses copy parts of these exact game scripts; on any other game
