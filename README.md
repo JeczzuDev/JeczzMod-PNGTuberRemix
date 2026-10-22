@@ -79,6 +79,9 @@ Los ajustes nuevos se guardan en el modelo, por estado, como claves `jz_follow_*
 - **Inspector de modelos** (`mod/tests/model_inspect.gd`): lee un `.pngRemix` como datos, sin cargarlo en la app, y escribe en `mods/_tests/inspect.log` el árbol de sprites con su Follow Movement y sus físicas.
   - Se registra como autoload extra en la copia de pruebas.
   - Se ejecuta con `"PNGTube Remix.console.exe" -- --jz-inspect=<ruta del modelo>`.
+- **Comparador de modelos** (`mod/tests/model_diff.gd`): lee dos `.pngRemix` como datos y escribe en `mods/_tests/diff.log` cada valor distinto, emparejando los sprites por id.
+  - Se ejecuta con `-- --jz-diff-a=<modelo> --jz-diff-b=<modelo>`.
+  - Sirve para comprobar que una copia de prueba solo difiere en lo esperado antes de copiarla sobre el modelo real.
 - **Prueba de físicas con stick** (`mod/tests/stick_physics_trial.gd`): solo para la copia de pruebas con `SANDBOX`. Añade "+ Secondary: Controller (Left) X" a la raíz y a la cabeza, simula el stick, registra el estiramiento y el balanceo de los sprites indicados y guarda el modelo de prueba.
   - Se ejecuta con `-- --jz-root=<sprite> --jz-head=<sprite> --jz-watch=<sprite>,<sprite>`.
 
