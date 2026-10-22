@@ -76,6 +76,9 @@ Los ajustes nuevos se guardan en el modelo, por estado, como claves `jz_follow_*
   - simula los sticks con `Input.action_press` y compara los resultados con el cálculo esperado; no mueve el cursor;
   - **cambia los ajustes de un sprite**, así que nunca la dejes activa para probar a mano.
 - **Diagnóstico** (`mod/tests/follow_diag.gd`): es de solo lectura. Escribe la configuración y el uso real del stick en `mods/_tests/diag.log`.
+- **Inspector de modelos** (`mod/tests/model_inspect.gd`): lee un `.pngRemix` como datos, sin cargarlo en la app, y escribe en `mods/_tests/inspect.log` el árbol de sprites con su Follow Movement y sus físicas.
+  - Se registra como autoload extra en la copia de pruebas.
+  - Se ejecuta con `"PNGTube Remix.console.exe" -- --jz-inspect=<ruta del modelo>`.
 
 ## Versiones
 

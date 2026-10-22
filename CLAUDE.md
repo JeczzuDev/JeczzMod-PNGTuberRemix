@@ -39,6 +39,12 @@ Mod for the installed **PNGTube Remix 1.4.5** build (Godot 4.6-stable, PCK v3, u
   - Position with a stick/keys uses `(|min| + max) / 2` as reach, so one-sided ranges got half. The mod passes `STICK_REACH`.
   - Rotation/scale "follow mouse velocity" never receives a velocity (`dir_vel_anim` unused).
   - Controller scale at rest = 1 + max.
+- **Physics** (`Scripts/Objects/ObjectComponents/movements.gd`):
+  - Node chain: `SpriteObject > Modifier1` (Follow writes here) `> Rotation` (IK) `> Modifier` (physics writes here) `> Origin`.
+  - Each frame, `%Dragger` (top-level) jumps or lerps (`dragSpeed`) to `Modifier`'s global position. `length = |prev - now| * (dir.x + dir.y)` is the signed per-frame displacement: movement along the anti-diagonal cancels out.
+  - `length` drives `stretch()` (`stretchAmount`) and `rotational_drag()` (`rdragStr`, `rLimitMin/Max`, `phys_eff`).
+  - With `physics = true`, a sprite adds its parent's `calc_length` (`add_parent_physics`), so children swing when an ancestor moves.
+  - Physics react to **any position change**, not to the mouse itself. Follow Movement **Position** on an ancestor triggers them; rotation/scale don't.
 - **Input:** controller actions have deadzone 0.2 and `Input.get_vector` remaps by it. Use strength 1.0 when simulating in tests.
 
 ## Secondary layer technique
