@@ -25,7 +25,10 @@ Mod for the installed **PNGTube Remix 1.4.5** build (Godot 4.6-stable, PCK v3, u
 ## Game facts (1.4.5)
 - **Selectors:** Follow selectors store the item **index** in `sprite_data.follow_type{,2,3}`.
   - 0 Mouse, 1/2 Controller L/R, 3-8 keyboard, 10-12 R1+L1/R2+L2/R3+L3, 15 None, 17 UDP.
-  - Mod: 18/19 Mouse X/Y, 20-23 stick L X, L Y, R X, R Y.
+  - Mod: 18/19 Mouse X/Y, 20-23 stick L X, L Y, R X, R Y, 24 D-pad, 25 Face buttons.
+- **Controller actions:** the game binds the D-pad (buttons 11-14) to `ControllerUp/Down/Left/Right` and Y/B/A/X (3/1/0/2) to `ControllerOne/Two/Three/Four`, together with the stick axes. These actions are used only by the follow components.
+  - At startup the loader moves the button events to `JzDpad*`/`JzFace*` (`follow_shared.split_controller_buttons()`), so sticks answer only to sticks.
+  - In tests, simulate physical buttons with `Input.parse_input_event(InputEventJoypadButton)`; `action_press` bypasses the InputMap.
   - Only append new options; never shift indices.
 - **Per-state storage:** `sprite_data` is saved whole per state, so extra keys persist and vanilla ignores them.
   - Undo/redo (`UndoRedoManager`) skips keys that `get_value()` returns null for, so `secondary_ui._ensure_key()` adds missing keys to every state before editing.

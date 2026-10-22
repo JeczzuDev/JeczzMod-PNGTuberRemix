@@ -41,7 +41,7 @@ func _ready() -> void:
 			var ob : OptionButton = found[0]
 			selectors[n] = ob
 			var extra := range(18, ob.item_count).map(func(i): return "[%d]=%s" % [i, ob.get_item_text(i)])
-			check("%s has 24 items: %s" % [n, ", ".join(extra)], ob.item_count == 24 and range(18, 24).all(func(i): return ob.get_item_id(i) == i))
+			check("%s has 26 items: %s" % [n, ", ".join(extra)], ob.item_count == 26 and range(18, 26).all(func(i): return ob.get_item_id(i) == i))
 	if sprites.is_empty() or selectors.size() < 3:
 		finish()
 		return
@@ -304,7 +304,48 @@ func _ready() -> void:
 		fp.picker.use_secondary and near(s.pos.y, 50.0) and near(s.pos.x, clamp(s.pos_in.x, -50.0 * abs(s.pos_in.normalized().x), 50.0 * abs(s.pos_in.normalized().x))))
 	release_sticks()
 	set_secondary(d, 15, 0)
+
+	# 12. D-pad and A/B/X/Y are split from the sticks. Real joypad button events
+	# (parse_input_event) go through the InputMap like a physical controller.
+	var has_button := func(action: String, index: int) -> bool:
+		return InputMap.action_get_events(action).any(func(e): return e is InputEventJoypadButton and e.button_index == index)
+	var has_motion := func(action: String) -> bool:
+		return InputMap.action_get_events(action).any(func(e): return e is InputEventJoypadMotion)
+	check("InputMap: A moved from ControllerThree to JzFaceDown, stick axis kept",
+		not has_button.call("ControllerThree", 0) and has_button.call("JzFaceDown", 0) and has_motion.call("ControllerThree"))
+	check("InputMap: D-pad up moved from ControllerUp to JzDpadUp, stick axis kept",
+		not has_button.call("ControllerUp", 11) and has_button.call("JzDpadUp", 11) and has_motion.call("ControllerUp"))
+	var button_cases := [
+		# [follow type, button index, pos, rot, scale]
+		[2, 0, Vector2(0, 0), 0.0, Vector2(1.3, 1.3)],      # Controller (Right) ignores A
+		[1, 11, Vector2(0, 0), 0.0, Vector2(1.3, 1.3)],     # Controller (Left) ignores D-pad up
+		[25, 0, Vector2(0, 50), 0.0, Vector2(1.3, 0.7)],    # Face buttons: A = down
+		[25, 1, Vector2(50, 0), 0.5, Vector2(0.7, 1.3)],    # Face buttons: B = right
+		[24, 11, Vector2(0, -50), 0.0, Vector2(1.3, 0.7)],  # D-pad up
+		[24, 14, Vector2(50, 0), 0.5, Vector2(0.7, 1.3)],   # D-pad right
+	]
+	for c in button_cases:
+		press_button(c[1], true)
+		s = await sample(sp, fp, fr, fs, c[0], c[0], c[0])
+		check_layer("type %d + joypad button %d" % [c[0], c[1]], s, c[2], c[3], c[4])
+		press_button(c[1], false)
+	set_secondary(d, 2, 2)
+	s = await sample(sp, fp, fr, fs, 0, 0, 0)
+	press_button(0, true)
+	s = await sample(sp, fp, fr, fs, 0, 0, 0)
+	check("last active + Controller (Right) secondary: pressing A doesn't take over", not fp.picker.use_secondary)
+	press_button(0, false)
+	check("secondary list has D-pad and Face buttons", sec_ob.get_item_index(24) >= 0 and sec_ob.get_item_index(25) >= 0)
+	set_secondary(d, 15, 0)
 	finish()
+
+func press_button(index: int, pressed: bool) -> void:
+	var ev := InputEventJoypadButton.new()
+	ev.device = 0
+	ev.button_index = index
+	ev.pressed = pressed
+	ev.pressure = 1.0 if pressed else 0.0
+	Input.parse_input_event(ev)
 
 func set_secondary(d: Dictionary, sec: int, blend: int) -> void:
 	d.jz_follow_type_b = sec

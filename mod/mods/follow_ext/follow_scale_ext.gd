@@ -84,20 +84,20 @@ func _update_primary(delta: float) -> void:
 	var axis_val : Vector2
 	if follow_type3 == Shared.MOUSE_X or follow_type3 == Shared.MOUSE_Y:
 		axis_val = _mouse_val(follow_type3)
-	elif follow_type3 in Shared.STICK_AXIS_TYPES:
+	elif follow_type3 in Shared.MOD_CONTROLLER_TYPES:
 		axis_val = follow_controller_scale(Shared.input_axis(self, follow_type3, "follow_type3"))
 	else:
 		super.update_scale(delta)
 		return
 
-	var use_y : bool = follow_type3 in Shared.Y_AXIS_TYPES
 	var invert_x: bool = actor.get_value("scale_invert_x")
 	var invert_y: bool = actor.get_value("scale_invert_y")
 	var swap_x: bool = actor.get_value("scale_swap_x")
 	var swap_y: bool = actor.get_value("scale_swap_y")
 
-	var x_val: float = axis_val.x if not use_y else 0.0
-	var y_val: float = axis_val.y if use_y else 0.0
+	var mask := Shared.axis_mask(follow_type3)
+	var x_val: float = axis_val.x * mask.x
+	var y_val: float = axis_val.y * mask.y
 
 	# Tail of the original update_scale(), unchanged.
 	target_scale = target_scale.lerp(Vector2(x_val, y_val), 0.15)

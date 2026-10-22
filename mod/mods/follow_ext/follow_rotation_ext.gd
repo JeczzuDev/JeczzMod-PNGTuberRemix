@@ -67,7 +67,7 @@ func _update_primary(delta: float) -> void:
 	var target_rot
 	if follow_type2 == Shared.MOUSE_X or follow_type2 == Shared.MOUSE_Y:
 		target_rot = _mouse_rotation(follow_type2)
-	elif follow_type2 in Shared.STICK_AXIS_TYPES:
+	elif follow_type2 in Shared.MOD_CONTROLLER_TYPES:
 		target_rot = _input_rotation(follow_type2, "follow_type2")
 	else:
 		super.update_rotation(delta)

@@ -10,10 +10,26 @@ const CTRL_LEFT_X := 20
 const CTRL_LEFT_Y := 21
 const CTRL_RIGHT_X := 22
 const CTRL_RIGHT_Y := 23
+const DPAD := 24
+const FACE_BUTTONS := 25
 const MOUSE_TYPES := [MOUSE, MOUSE_X, MOUSE_Y]
 ## One axis of a stick (the mod's options 20..23).
 const STICK_AXIS_TYPES := [CTRL_LEFT_X, CTRL_LEFT_Y, CTRL_RIGHT_X, CTRL_RIGHT_Y]
-const CONTROLLER_TYPES := [1, 2, 10, 11, 12, CTRL_LEFT_X, CTRL_LEFT_Y, CTRL_RIGHT_X, CTRL_RIGHT_Y]
+## Controller options the mod computes itself (vanilla scripts don't know them).
+const MOD_CONTROLLER_TYPES := [CTRL_LEFT_X, CTRL_LEFT_Y, CTRL_RIGHT_X, CTRL_RIGHT_Y, DPAD, FACE_BUTTONS]
+const CONTROLLER_TYPES := [1, 2, 10, 11, 12, CTRL_LEFT_X, CTRL_LEFT_Y, CTRL_RIGHT_X, CTRL_RIGHT_Y, DPAD, FACE_BUTTONS]
+
+## The game binds the D-pad to the left stick's actions and A/B/X/Y to the right
+## stick's, so pressing A moved the sprite like the right stick going down. The
+## loader moves those buttons to these actions: sticks only answer to sticks,
+## and the buttons become their own sources (DPAD, FACE_BUTTONS).
+## Game action -> mod action. Order of each group: left, right, up, down.
+const BUTTON_SPLIT := {
+	"ControllerLeft": "JzDpadLeft", "ControllerRight": "JzDpadRight",
+	"ControllerUp": "JzDpadUp", "ControllerDown": "JzDpadDown",
+	"ControllerFour": "JzFaceLeft", "ControllerTwo": "JzFaceRight",
+	"ControllerOne": "JzFaceUp", "ControllerThree": "JzFaceDown",
+}
 ## Options that only use the vertical axis of their input.
 const Y_AXIS_TYPES := [MOUSE_Y, CTRL_LEFT_Y, CTRL_RIGHT_Y]
 
@@ -23,7 +39,22 @@ const EXTRA_PRIMARY_ITEMS := [
 	[MOUSE_X, "TR_MOUSE", " X"], [MOUSE_Y, "TR_MOUSE", " Y"],
 	[CTRL_LEFT_X, "TR_CONTROLLER_LEFT", " X"], [CTRL_LEFT_Y, "TR_CONTROLLER_LEFT", " Y"],
 	[CTRL_RIGHT_X, "TR_CONTROLLER_RIGHT", " X"], [CTRL_RIGHT_Y, "TR_CONTROLLER_RIGHT", " Y"],
+	[DPAD, "D-pad", ""], [FACE_BUTTONS, "Face buttons (A/B/X/Y)", ""],
 ]
+
+## Moves the D-pad and A/B/X/Y out of the game's stick actions (see BUTTON_SPLIT).
+## Safe to call more than once.
+static func split_controller_buttons() -> void:
+	for src in BUTTON_SPLIT:
+		if not InputMap.has_action(src):
+			continue
+		var dst : String = BUTTON_SPLIT[src]
+		if not InputMap.has_action(dst):
+			InputMap.add_action(dst, InputMap.action_get_deadzone(src))
+		for ev in InputMap.action_get_events(src):
+			if ev is InputEventJoypadButton:
+				InputMap.action_erase_event(src, ev)
+				InputMap.action_add_event(dst, ev)
 const KEYBOARD_TYPES := [3, 4, 5, 6, 7, 8]
 
 ## Secondary source per selector, stored per state in sprite_data like the
@@ -94,6 +125,8 @@ static func input_axis(comp, t: int, key: String) -> Vector2:
 		12: return comp.axis_lr_3
 		CTRL_LEFT_X, CTRL_LEFT_Y: return comp.axis_left * axis_mask(t)
 		CTRL_RIGHT_X, CTRL_RIGHT_Y: return comp.axis_right * axis_mask(t)
+		DPAD: return Input.get_vector("JzDpadLeft", "JzDpadRight", "JzDpadUp", "JzDpadDown")
+		FACE_BUTTONS: return Input.get_vector("JzFaceLeft", "JzFaceRight", "JzFaceUp", "JzFaceDown")
 	if t in KEYBOARD_TYPES:
 		return GlobalCalculations.some_keyboard_calc_wasd(key, comp.actor)
 	return Vector2.ZERO

@@ -9,6 +9,7 @@
 En **Follow Movement** (Position, Rotation y Scale):
 
 - **Opciones por eje** en los selectores *Follow Option*: `Mouse X`, `Mouse Y`, `Controller (Left) X/Y` y `Controller (Right) X/Y`. Solo ese eje mueve, gira o escala el sprite.
+- **Sticks separados de los botones**: en la app original, la cruceta cuenta como el stick izquierdo y A/B/X/Y como el derecho. Con el mod, los sticks responden solo al stick, y `D-pad` y `Face buttons (A/B/X/Y)` pasan a ser fuentes propias.
 - **Fuente secundaria** (`+ Secondary`) bajo cada selector, para combinar dos entradas. El selector **Combine** elige cómo se combinan:
   - **Last active** (por defecto): manda la última entrada que usaste; la otra se ignora hasta que la uses.
   - **Sum**: los efectos se suman, sin salir del rango mín/máx.
@@ -83,6 +84,7 @@ Los ajustes nuevos se guardan en el modelo, por estado, como claves `jz_follow_*
 | 1.0.0 | Mouse X / Mouse Y |
 | 1.1.0 | Fuente secundaria y Combine (Last active, Sum, Secondary priority); alcance completo del stick y Position Snap en Position |
 | 1.2.0 | Ejes individuales de los sticks |
+| 1.3.0 | Sticks separados de la cruceta y de A/B/X/Y; fuentes nuevas `D-pad` y `Face buttons` |
 
 ## Licencia
 

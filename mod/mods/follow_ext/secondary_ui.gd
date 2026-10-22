@@ -22,6 +22,7 @@ const SOURCES := [
 	[1, "TR_CONTROLLER_LEFT"], [2, "TR_CONTROLLER_RIGHT"],
 	[20, "TR_CONTROLLER_LEFT", " X"], [21, "TR_CONTROLLER_LEFT", " Y"],
 	[22, "TR_CONTROLLER_RIGHT", " X"], [23, "TR_CONTROLLER_RIGHT", " Y"],
+	[24, "D-pad"], [25, "Face buttons (A/B/X/Y)"],
 	[10, "R1 + L1"], [11, "R2 + L2"], [12, "R3 + L3"],
 	[-1, ""],
 	[3, "TR_WASD_WS"], [4, "TR_WASD_AD"], [5, "TR_WASD"],

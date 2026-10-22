@@ -8,7 +8,7 @@ extends Node
 ## tree with one of the original scripts gets its script swapped for a mod
 ## subclass before its _ready, keeping all script variable values.
 
-const MOD_VERSION := "1.2.0"
+const MOD_VERSION := "1.3.0"
 const MOD_DIR := "res://mods"
 const LOG_PREFIX := "[JeczzMod] "
 ## The subclasses copy parts of these exact game scripts; on any other game
@@ -44,6 +44,8 @@ func _init() -> void:
 			push_error(LOG_PREFIX + "could not load " + SCRIPT_SWAPS[original])
 			continue
 		_swaps[original] = sub
+	# Sticks only answer to sticks; D-pad and A/B/X/Y become their own sources.
+	load(FOLLOW_SHARED).split_controller_buttons()
 	print(LOG_PREFIX, "v", MOD_VERSION, " loaded ", _swaps.size(), "/", SCRIPT_SWAPS.size(), " script swaps")
 
 func _enter_tree() -> void:
